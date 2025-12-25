@@ -13,25 +13,28 @@ fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
-            let main_window = app.get_window("main").unwrap();
+            let main_window = app.get_window("main")
+                .expect("Failed to get main window");
             
             // Register F key shortcut
             let window_f = main_window.clone();
-            app.global_shortcut_manager()
+            if let Err(e) = app.global_shortcut_manager()
                 .register("F", move || {
                     let is_fullscreen = window_f.is_fullscreen().unwrap_or(false);
                     let _ = window_f.set_fullscreen(!is_fullscreen);
-                })
-                .unwrap();
+                }) {
+                eprintln!("Failed to register F key shortcut: {}", e);
+            }
             
             // Register F11 key shortcut
             let window_f11 = main_window.clone();
-            app.global_shortcut_manager()
+            if let Err(e) = app.global_shortcut_manager()
                 .register("F11", move || {
                     let is_fullscreen = window_f11.is_fullscreen().unwrap_or(false);
                     let _ = window_f11.set_fullscreen(!is_fullscreen);
-                })
-                .unwrap();
+                }) {
+                eprintln!("Failed to register F11 key shortcut: {}", e);
+            }
             
             Ok(())
         })
