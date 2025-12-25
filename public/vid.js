@@ -22,22 +22,25 @@
     let vr = window.vr;
 
     // Add keyboard event listener for fullscreen toggle
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', async function(event) {
         // Check for 'F' key (keyCode 70 or key === 'f' or key === 'F')
         // or 'F11' key (keyCode 122 or key === 'F11')
         const isFullscreenKey = event.key === 'f' || event.key === 'F' || event.keyCode === 70 ||
                                 event.key === 'F11' || event.keyCode === 122;
         if (isFullscreenKey) {
             event.preventDefault();
-            toggleFullscreen();
+            await toggleFullscreen();
         }
     });
 
-    function toggleFullscreen() {
-        if (player.isFullscreen()) {
-            player.exitFullscreen();
-        } else {
-            player.requestFullscreen();
+    async function toggleFullscreen() {
+        // Use Tauri API to toggle fullscreen for the entire window
+        if (window.__TAURI__) {
+            try {
+                await window.__TAURI__.invoke('toggle_fullscreen');
+            } catch (error) {
+                console.error('Failed to toggle fullscreen:', error);
+            }
         }
     }
 }(window, window.videojs));
