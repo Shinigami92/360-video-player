@@ -41,6 +41,8 @@
             } catch (error) {
                 console.error('Failed to toggle fullscreen:', error);
             }
+        } else {
+            console.warn('Tauri API not available - fullscreen toggle only works in Tauri application');
         }
     }
 }(window, window.videojs));
