@@ -25,10 +25,9 @@
     document.addEventListener('keydown', function(event) {
         // Check for 'F' key (keyCode 70 or key === 'f' or key === 'F')
         // or 'F11' key (keyCode 122 or key === 'F11')
-        if (event.key === 'f' || event.key === 'F' || event.keyCode === 70) {
-            event.preventDefault();
-            toggleFullscreen();
-        } else if (event.key === 'F11' || event.keyCode === 122) {
+        const isFullscreenKey = event.key === 'f' || event.key === 'F' || event.keyCode === 70 ||
+                                event.key === 'F11' || event.keyCode === 122;
+        if (isFullscreenKey) {
             event.preventDefault();
             toggleFullscreen();
         }
